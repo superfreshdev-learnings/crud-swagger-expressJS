@@ -1,0 +1,121 @@
+openapi: 3.0.0
+info:
+  title: Benutzer API
+  version: 1.0.0
+  description: Eine einfache CRUD-API mit Express und Swagger
+
+servers:
+  - url: http://localhost:3000
+
+tags:
+  - name: Users
+    description: Benutzerverwaltung
+
+paths:
+  /api/users:
+    get:
+      tags: [Users]
+      summary: Alle Benutzer abrufen
+      responses:
+        '200':
+          description: Erfolgreich
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+
+    post:
+      tags: [Users]
+      summary: Neuen Benutzer erstellen
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserInput'
+      responses:
+        '201':
+          description: Benutzer erstellt
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+
+  /api/users/{id}:
+    get:
+      tags: [Users]
+      summary: Benutzer nach ID abrufen
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Benutzer gefunden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: Nicht gefunden
+
+    put:
+      tags: [Users]
+      summary: Benutzer aktualisieren
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserInput'
+      responses:
+        '200':
+          description: Benutzer aktualisiert
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+
+    delete:
+      tags: [Users]
+      summary: Benutzer löschen
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Benutzer gelöscht
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: Max Mustermann
+
+    UserInput:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          example: Max Mustermann
